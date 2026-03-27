@@ -14,6 +14,19 @@ export function saveSession(session) {
   saveData(SESSION_KEY, history);
 }
 
+export function getPreviousWorkoutString(exerciseId) {
+  const history = getHistory();
+  // History is automatically sorted newest-first
+  for (const session of history) {
+    const foundEx = session.sessionExercises.find(ex => ex.exerciseId === exerciseId);
+    if (foundEx && foundEx.sets && foundEx.sets.length > 0) {
+      const setStrings = foundEx.sets.map(s => `${s.weight} x ${s.reps}`);
+      return `Last time: ${setStrings.join(', ')}`;
+    }
+  }
+  return null;
+}
+
 // --- V2: ACTIVE SESSION PERSISTENCE ---
 export function getActiveSession() {
   return loadData(ACTIVE_SESSION_KEY) || null;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTemplates } from '../data/templateStore';
 import { getExercises } from '../data/exerciseStore';
-import { saveSession } from '../data/sessionStore';
+import { saveSession, getPreviousWorkoutString } from '../data/sessionStore';
 import { generateId } from '../utils/ids';
 import { isValidNumber } from '../utils/validation';
 import ScreenHeader from '../components/layout/ScreenHeader';
@@ -61,7 +61,12 @@ function WorkoutRunner({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {activeSession.sessionExercises.map((ex, exIndex) => (
           <div key={ex.id} className="card" style={{ margin: 0, padding: '1.25rem' }}>
-            <h3 style={{ marginBottom: '1.25rem', color: 'var(--secondary)', fontSize: '1.2rem' }}>{ex.exerciseName}</h3>
+            <h3 style={{ marginBottom: ex.previousString ? '0.25rem' : '1.25rem', color: 'var(--secondary)', fontSize: '1.2rem' }}>{ex.exerciseName}</h3>
+            {ex.previousString && (
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.25rem', fontStyle: 'italic' }}>
+                {ex.previousString}
+              </p>
+            )}
             
             <div style={{ display: 'flex', marginBottom: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               <div style={{ width: '30px', paddingLeft: '0.25rem' }}>Set</div>
@@ -158,6 +163,7 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
         id: generateId(),
         exerciseId: exId,
         exerciseName: ex ? ex.name : 'Unknown Exercise',
+        previousString: getPreviousWorkoutString(exId),
         sets: [{ id: generateId(), weight: '', reps: '' }]
       };
     });
