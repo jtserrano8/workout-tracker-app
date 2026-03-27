@@ -84,3 +84,68 @@ button:active {
 .btn-danger { background-color: transparent; border: 1px solid var(--error); color: var(--error); }
 .btn-ghost { background-color: rgba(255,255,255,0.05); border: 1px dashed #666; color: var(--text-muted); }
 .btn-ghost:hover { background-color: rgba(255,255,255,0.1); }
+
+/* --- V2 iOS SafeArea Bottom Nav Fixes --- */
+.bottom-nav {
+  height: auto !important;
+  /* CRITICAL: env(safe-area-inset-bottom) forces the bar to jump above the iOS home swipe indicator */
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
+  padding-top: 0.75rem !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-inline: 0.25rem !important;
+}
+
+.nav-button {
+  flex: 1 !important;
+  padding: 0 !important;
+  min-width: 0 !important; /* Prevents overflow pushing */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-muted) !important;
+}
+
+.nav-button.active {
+  color: var(--primary) !important;
+}
+
+.nav-button.active .nav-icon {
+  transform: scale(1.15) !important; /* Subtle jump to indicate selection */
+}
+
+.nav-icon {
+  font-size: 1.35rem !important;
+  margin-bottom: 0.35rem !important;
+  transition: transform 0.2s ease !important;
+}
+
+.nav-label {
+  font-size: 0.65rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 100% !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2px !important;
+  text-align: center !important;
+}
+
+/* Ensure app wrapper accommodates the dynamic viewport */
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100vh !important;
+  height: 100dvh !important; /* Modern iOS dynamic viewport size */
+}
+
+.main-content {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  /* Ensure the content scroll padding matches our new taller navbar */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important; 
+}

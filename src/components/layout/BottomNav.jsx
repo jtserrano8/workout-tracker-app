@@ -2,34 +2,23 @@ import React from 'react';
 
 function BottomNav({ currentTab, setCurrentTab }) {
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'templates', label: 'Templates' },
-    { id: 'workout', label: 'Workout' },
-    { id: 'history', label: 'History' },
-    { id: 'library', label: 'Exercises' }
+    { id: 'dashboard', label: 'Home', icon: '🏠' },
+    { id: 'workout', label: 'Workout', icon: '💪' },
+    { id: 'templates', label: 'Routines', icon: '📋' },
+    { id: 'history', label: 'History', icon: '📅' },
+    { id: 'library', label: 'Library', icon: '📚' }
   ];
 
   return (
-    <nav style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0,
-      display: 'flex', justifyContent: 'space-around',
-      backgroundColor: 'var(--bg-nav)', padding: '1rem 0',
-      borderTop: '1px solid #333'
-    }}>
+    <nav className="bottom-nav">
       {tabs.map(tab => (
         <button 
           key={tab.id}
-          onClick={() => setCurrentTab(tab.id)}
-          style={{
-            background: 'none',
-            color: currentTab === tab.id ? 'var(--primary)' : 'var(--text-muted)',
-            border: 'none',
-            padding: '0.25rem',
-            fontWeight: currentTab === tab.id ? 'bold' : 'normal',
-            fontSize: '0.9rem'
-          }}
+          className={`nav-button ${currentTab === tab.id ? 'active' : ''}`}
+          onClick={() => setCurrentTab?.(tab.id)}
         >
-          {tab.label}
+          <div className="nav-icon">{tab.icon}</div>
+          <div className="nav-label">{tab.label}</div>
         </button>
       ))}
     </nav>
