@@ -4,8 +4,17 @@ import { getExercises } from '../data/exerciseStore';
 import { generateId } from '../utils/ids';
 import ScreenHeader from '../components/layout/ScreenHeader';
 
-function Templates() {
+function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
   const [templates, setTemplates] = useState([]);
+  const [templateToConfirm, setTemplateToConfirm] = useState(null);
+
+  const handleStartTemplate = (tpl) => {
+    if (activeSession) {
+      setTemplateToConfirm(tpl);
+    } else {
+      startTemplate(tpl);
+    }
+  };
   const [availableExercises, setAvailableExercises] = useState([]);
   
   const [isEditing, setIsEditing] = useState(false);
@@ -95,6 +104,50 @@ function Templates() {
     const ex = availableExercises.find(e => e.id === id);
     return ex ? ex.name : 'Unknown Exercise';
   };
+
+  if (templateToConfirm) {
+    return (
+      <div className="screen-container">
+        <ScreenHeader title="Workout in Progress" />
+        <div className="card" style={{ padding: '2rem 1.5rem', textAlign: 'center', margin: '0' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+          <h2 style={{ color: 'var(--text-main)', marginBottom: '1rem', fontSize: '1.4rem' }}>Resume or Restart?</h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', lineHeight: '1.5', fontSize: '0.95rem' }}>
+            You currently have a <strong>{activeSession.name}</strong> session active. Do you want to continue it, or discard it and start <strong>{templateToConfirm.name}</strong>?
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+             <button 
+               onClick={() => {
+                 resumeCurrentWorkout();
+                 setTemplateToConfirm(null);
+               }}
+               className="btn-primary"
+               style={{ padding: '1rem', border: 'none', borderRadius: '4px', fontSize: '1rem' }}
+             >
+               Resume Current Workout
+             </button>
+             <button 
+               onClick={() => {
+                 startTemplate(templateToConfirm);
+                 setTemplateToConfirm(null);
+               }} 
+               className="btn-danger" 
+               style={{ padding: '1rem', border: '1px solid var(--error)', borderRadius: '4px', backgroundColor: 'transparent', fontSize: '1rem' }}
+             >
+               Discard & Start New
+             </button>
+             <button 
+               onClick={() => setTemplateToConfirm(null)}
+               className="btn-ghost"
+               style={{ padding: '1rem', borderRadius: '4px', marginTop: '0.5rem', fontSize: '1rem' }}
+             >
+               Cancel
+             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isEditing) {
     if (showExercisePicker) {
@@ -213,8 +266,8 @@ function Templates() {
                 </p>
               </div>
               <div>
-                 <button disabled className="btn-outline" style={{ cursor: 'not-allowed', color: '#888', borderColor: '#555', padding: '0.4rem 0.8rem', borderRadius: '4px' }}>
-                   Coming Soon
+                 <button onClick={() => handleStartTemplate(tpl)} className="btn-primary" style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', border: 'none' }}>
+                   Start
                  </button>
               </div>
             </div>

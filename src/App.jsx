@@ -13,17 +13,27 @@ function App() {
 
   // V2: Persist in-progress workout state across tabs and reloads
   const [activeSession, setActiveSessionState] = useState(() => getActiveSession());
+  const [pendingTemplate, setPendingTemplate] = useState(null);
 
   const handleSetActiveSession = (session) => {
     setActiveSessionState(session);
     saveActiveSession(session);
   };
 
+  const startTemplate = (template) => {
+    setPendingTemplate(template);
+    setCurrentTab('workout');
+  };
+
+  const resumeCurrentWorkout = () => {
+    setCurrentTab('workout');
+  };
+
   const renderScreen = () => {
     switch(currentTab) {
       case 'dashboard': return <Dashboard setCurrentTab={setCurrentTab} setSelectedSession={setSelectedSession} />;
-      case 'templates': return <Templates />;
-      case 'workout': return <ActiveWorkout activeSession={activeSession} setActiveSession={handleSetActiveSession} />;
+      case 'templates': return <Templates startTemplate={startTemplate} activeSession={activeSession} resumeCurrentWorkout={resumeCurrentWorkout} />;
+      case 'workout': return <ActiveWorkout activeSession={activeSession} setActiveSession={handleSetActiveSession} pendingTemplate={pendingTemplate} setPendingTemplate={setPendingTemplate} />;
       case 'history': return <History selectedSession={selectedSession} setSelectedSession={setSelectedSession} />;
       case 'library': return <ExerciseLibrary />;
       default: return <Dashboard setCurrentTab={setCurrentTab} setSelectedSession={setSelectedSession} />;

@@ -145,7 +145,7 @@ function WorkoutRunner({
 
 
 // --- MAIN CONTROLLER COMPONENT ---
-function ActiveWorkout({ activeSession, setActiveSession }) {
+function ActiveWorkout({ activeSession, setActiveSession, pendingTemplate, setPendingTemplate }) {
   const [templates, setTemplates] = useState([]);
   const [availableExercises, setAvailableExercises] = useState([]);
   
@@ -155,6 +155,14 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
     setTemplates(getTemplates());
     setAvailableExercises(getExercises());
   }, []);
+
+  // NEW: Listen for a template launched directly from the Templates screen
+  useEffect(() => {
+    if (pendingTemplate && availableExercises.length > 0) {
+      startWorkout(pendingTemplate);
+      setPendingTemplate(null); // Clear it from memory so it doesn't fire again
+    }
+  }, [pendingTemplate, availableExercises]);
 
   const startWorkout = (template) => {
     const sessionExercises = (template.exercises || []).map(exId => {
