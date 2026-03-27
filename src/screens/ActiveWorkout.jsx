@@ -154,12 +154,10 @@ function WorkoutRunner({
 
 
 // --- MAIN CONTROLLER COMPONENT ---
-function ActiveWorkout() {
+function ActiveWorkout({ activeSession, setActiveSession }) {
   const [templates, setTemplates] = useState([]);
   const [availableExercises, setAvailableExercises] = useState([]);
   
-  const [activeSession, setActiveSession] = useState(null);
-  const [startTime, setStartTime] = useState(null);
   const [warningMsg, setWarningMsg] = useState('');
 
   useEffect(() => {
@@ -182,9 +180,9 @@ function ActiveWorkout() {
       id: generateId(),
       templateId: template.id,
       name: template.name,
+      startTime: Date.now(),
       sessionExercises: sessionExercises
     });
-    setStartTime(Date.now());
     setWarningMsg('');
   };
 
@@ -193,9 +191,9 @@ function ActiveWorkout() {
       id: generateId(),
       templateId: null,
       name: 'Empty Workout',
+      startTime: Date.now(),
       sessionExercises: []
     });
-    setStartTime(Date.now());
     setWarningMsg('');
   };
 
@@ -252,7 +250,7 @@ function ActiveWorkout() {
       return;
     }
 
-    const durationMinutes = Math.floor((Date.now() - startTime) / 60000);
+    const durationMinutes = Math.floor((Date.now() - activeSession.startTime) / 60000);
     const finalSession = {
       id: activeSession.id,
       templateId: activeSession.templateId,
