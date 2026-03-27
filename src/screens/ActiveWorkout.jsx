@@ -39,7 +39,6 @@ function WorkoutRunner({
   activeSession, 
   warningMsg, 
   updateSet, 
-  toggleSetComplete, 
   addSet, 
   duplicateLastSet, 
   finishWorkout, 
@@ -65,27 +64,29 @@ function WorkoutRunner({
             <h3 style={{ marginBottom: '1.25rem', color: 'var(--secondary)', fontSize: '1.2rem' }}>{ex.exerciseName}</h3>
             
             <div style={{ display: 'flex', marginBottom: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              <div style={{ width: '30px' }}>Set</div>
+              <div style={{ width: '30px', paddingLeft: '0.25rem' }}>Set</div>
               <div style={{ flex: 1, textAlign: 'center' }}>Lbs</div>
               <div style={{ flex: 1, textAlign: 'center' }}>Reps</div>
-              <div style={{ width: '40px', textAlign: 'center' }}>Done</div>
             </div>
 
             {ex.sets.map((set, setIndex) => {
-              const rowOpacity = set.isCompleted ? 0.4 : 1;
+              // Automatic validation: visually indicate if the set is successfully filled
+              const isSetValid = isValidNumber(set.weight) && isValidNumber(set.reps);
+              const rowBorder = isSetValid ? '1px solid rgba(76, 175, 80, 0.3)' : '1px solid transparent';
+              const inputBg = isSetValid ? '#1a241b' : '#121212';
+              
               return (
-                <div key={set.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', opacity: rowOpacity, transition: 'opacity 0.2s' }}>
-                  <div style={{ width: '30px', fontWeight: 'bold', color: 'var(--text-muted)' }}>{setIndex + 1}</div>
+                <div key={set.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', border: rowBorder, padding: '0.25rem', borderRadius: '6px', transition: 'all 0.2s' }}>
+                  <div style={{ width: '30px', fontWeight: 'bold', color: 'var(--text-muted)', paddingLeft: '0.25rem' }}>{setIndex + 1}</div>
                   
                   <div style={{ flex: 1, padding: '0 0.5rem' }}>
                     <input 
                       type="number" 
                       value={set.weight}
                       onChange={e => updateSet(exIndex, setIndex, 'weight', e.target.value)}
-                      disabled={set.isCompleted}
                       placeholder="--"
                       className="input-base"
-                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem' }} 
+                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
                     />
                   </div>
                   
@@ -94,25 +95,10 @@ function WorkoutRunner({
                       type="number" 
                       value={set.reps}
                       onChange={e => updateSet(exIndex, setIndex, 'reps', e.target.value)}
-                      disabled={set.isCompleted}
                       placeholder="--"
                       className="input-base"
-                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem' }} 
+                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
                     />
-                  </div>
-
-                  <div style={{ width: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <button 
-                      onClick={() => toggleSetComplete(exIndex, setIndex)}
-                      style={{ 
-                        width: '36px', height: '36px', padding: 0, borderRadius: '6px',
-                        backgroundColor: set.isCompleted ? 'var(--secondary)' : '#444',
-                        color: set.isCompleted ? 'var(--bg-dark)' : 'transparent',
-                        fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none'
-                      }}
-                    >
-                      ✓
-                    </button>
                   </div>
                 </div>
               );
@@ -172,7 +158,7 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
         id: generateId(),
         exerciseId: exId,
         exerciseName: ex ? ex.name : 'Unknown Exercise',
-        sets: [{ id: generateId(), weight: '', reps: '', isCompleted: false }]
+        sets: [{ id: generateId(), weight: '', reps: '' }]
       };
     });
 
@@ -203,24 +189,10 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
     setActiveSession(updated);
   };
 
-  const toggleSetComplete = (exerciseIndex, setIndex) => {
-    const updated = { ...activeSession };
-    const setToUpdate = updated.sessionExercises[exerciseIndex].sets[setIndex];
-    if (!setToUpdate.isCompleted) {
-      if (!isValidNumber(setToUpdate.weight) || !isValidNumber(setToUpdate.reps)) {
-        setWarningMsg('Please enter valid numbers for weight and reps before completing the set.');
-        return;
-      }
-    }
-    setWarningMsg('');
-    setToUpdate.isCompleted = !setToUpdate.isCompleted;
-    setActiveSession(updated);
-  };
-
   const addSet = (exerciseIndex) => {
     const updated = { ...activeSession };
     updated.sessionExercises[exerciseIndex].sets.push({
-      id: generateId(), weight: '', reps: '', isCompleted: false
+      id: generateId(), weight: '', reps: ''
     });
     setActiveSession(updated);
   };
@@ -233,8 +205,7 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
     sets.push({
       id: generateId(),
       weight: lastSet.weight,
-      reps: lastSet.reps,
-      isCompleted: false
+      reps: lastSet.reps
     });
     setActiveSession(updated);
   };
@@ -242,11 +213,12 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
   const finishWorkout = () => {
     const cleanedExercises = activeSession.sessionExercises.map(ex => ({
       ...ex,
-      sets: ex.sets.filter(s => s.isCompleted)
+      // Automatic completion strategy: only filter sets that have valid inputs.
+      sets: ex.sets.filter(s => isValidNumber(s.weight) && isValidNumber(s.reps))
     })).filter(ex => ex.sets.length > 0);
 
     if (cleanedExercises.length === 0) {
-      setWarningMsg('You have zero completed sets! Complete at least one set to save the workout, or click Cancel to discard.');
+      setWarningMsg('You have zero completed sets! Enter valid weight and reps for at least one set, or click Cancel to discard.');
       return;
     }
 
@@ -285,7 +257,6 @@ function ActiveWorkout({ activeSession, setActiveSession }) {
       activeSession={activeSession}
       warningMsg={warningMsg}
       updateSet={updateSet}
-      toggleSetComplete={toggleSetComplete}
       addSet={addSet}
       duplicateLastSet={duplicateLastSet}
       finishWorkout={finishWorkout}
