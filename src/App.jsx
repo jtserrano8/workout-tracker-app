@@ -5,6 +5,7 @@ import Templates from './screens/Templates';
 import ActiveWorkout from './screens/ActiveWorkout';
 import History from './screens/History';
 import ExerciseLibrary from './screens/ExerciseLibrary';
+import Bodyweight from './screens/Bodyweight';
 import { getActiveSession, saveActiveSession } from './data/sessionStore';
 
 function App() {
@@ -30,8 +31,9 @@ function App() {
   };
 
   const renderScreen = () => {
-    switch(currentTab) {
+    switch (currentTab) {
       case 'dashboard': return <Dashboard setCurrentTab={setCurrentTab} setSelectedSession={setSelectedSession} />;
+      case 'bodyweight': return <Bodyweight />;
       case 'templates': return <Templates startTemplate={startTemplate} activeSession={activeSession} resumeCurrentWorkout={resumeCurrentWorkout} />;
       case 'workout': return <ActiveWorkout activeSession={activeSession} setActiveSession={handleSetActiveSession} pendingTemplate={pendingTemplate} setPendingTemplate={setPendingTemplate} />;
       case 'history': return <History selectedSession={selectedSession} setSelectedSession={setSelectedSession} />;
