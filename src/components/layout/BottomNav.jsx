@@ -7,6 +7,7 @@ function BottomNav({ currentTab, setCurrentTab }) {
     { id: 'templates', label: 'Routines', icon: '📋' },
     { id: 'history', label: 'History', icon: '📅' },
     { id: 'bodyweight', label: 'Weight', icon: '⚖️' },
+    { id: 'goals', label: 'Goals', icon: '🎯' },
     { id: 'library', label: 'Library', icon: '📚' }
   ];
 

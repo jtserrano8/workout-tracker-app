@@ -6,6 +6,7 @@ import ActiveWorkout from './screens/ActiveWorkout';
 import History from './screens/History';
 import ExerciseLibrary from './screens/ExerciseLibrary';
 import Bodyweight from './screens/Bodyweight';
+import Goals from './screens/Goals';
 import { getActiveSession, saveActiveSession } from './data/sessionStore';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       case 'templates': return <Templates startTemplate={startTemplate} activeSession={activeSession} resumeCurrentWorkout={resumeCurrentWorkout} />;
       case 'workout': return <ActiveWorkout activeSession={activeSession} setActiveSession={handleSetActiveSession} pendingTemplate={pendingTemplate} setPendingTemplate={setPendingTemplate} />;
       case 'history': return <History selectedSession={selectedSession} setSelectedSession={setSelectedSession} />;
+      case 'goals': return <Goals />;
       case 'library': return <ExerciseLibrary />;
       default: return <Dashboard setCurrentTab={setCurrentTab} setSelectedSession={setSelectedSession} />;
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTemplates } from '../data/templateStore';
 import { getExercises } from '../data/exerciseStore';
-import { saveSession, getPreviousWorkoutString } from '../data/sessionStore';
+import { saveSession, getPreviousWorkoutString, getPreviousWorkoutSets } from '../data/sessionStore';
 import { generateId } from '../utils/ids';
 import { isValidNumber } from '../utils/validation';
 import ScreenHeader from '../components/layout/ScreenHeader';
@@ -89,7 +89,7 @@ function WorkoutRunner({
                       type="number" 
                       value={set.weight}
                       onChange={e => updateSet(exIndex, setIndex, 'weight', e.target.value)}
-                      placeholder="--"
+                      placeholder={ex.previousSets?.[setIndex]?.weight || '--'}
                       className="input-base"
                       style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
                     />
@@ -100,7 +100,7 @@ function WorkoutRunner({
                       type="number" 
                       value={set.reps}
                       onChange={e => updateSet(exIndex, setIndex, 'reps', e.target.value)}
-                      placeholder="--"
+                      placeholder={ex.previousSets?.[setIndex]?.reps || '--'}
                       className="input-base"
                       style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
                     />
@@ -172,6 +172,7 @@ function ActiveWorkout({ activeSession, setActiveSession, pendingTemplate, setPe
         exerciseId: exId,
         exerciseName: ex ? ex.name : 'Unknown Exercise',
         previousString: getPreviousWorkoutString(exId),
+        previousSets: getPreviousWorkoutSets(exId),
         sets: [{ id: generateId(), weight: '', reps: '' }]
       };
     });

@@ -27,6 +27,35 @@ export function getPreviousWorkoutString(exerciseId) {
   return null;
 }
 
+export function getPreviousWorkoutSets(exerciseId) {
+  const history = getHistory();
+
+  // Loop through workouts (newest first)
+  for (const session of history) {
+    const foundEx = session.sessionExercises.find(
+      ex => ex.exerciseId === exerciseId
+    );
+
+    if (foundEx && foundEx.sets && foundEx.sets.length > 0) {
+      return foundEx.sets.map(set => ({
+        weight: String(set.weight),
+        reps: String(set.reps)
+      }));
+    }
+  }
+
+  return [];
+}
+// --- V2: EDIT SAVED SESSION ---
+export function updateSession(updatedSession) {
+  const history = getHistory();
+  const index = history.findIndex(s => s.id === updatedSession.id);
+  if (index !== -1) {
+    history[index] = updatedSession;
+    saveData(SESSION_KEY, history);
+  }
+}
+
 // --- V2: ACTIVE SESSION PERSISTENCE ---
 export function getActiveSession() {
   return loadData(ACTIVE_SESSION_KEY) || null;
