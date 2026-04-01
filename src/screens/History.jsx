@@ -91,23 +91,23 @@ function History({ selectedSession, setSelectedSession }) {
         <div className="card">
           <h2 style={{ color: 'var(--primary)', marginBottom: '0.75rem', fontSize: '1.5rem', fontWeight: 'bold' }}>{displaySession.name}</h2>
 
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <div><span style={{ color: 'var(--text-main)', fontWeight: '500' }}>Date:</span> {formatDate(displaySession.date)}</div>
-            <div><span style={{ color: 'var(--text-main)', fontWeight: '500' }}>Duration:</span> {displaySession.durationMinutes} minutes</div>
-            {displaySession.notes && <div><span style={{ color: 'var(--text-main)', fontWeight: '500' }}>Notes:</span> {displaySession.notes}</div>}
+          <div style={{ color: 'var(--text-main)', fontSize: '0.95rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div><span style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>Date:</span> {formatDate(displaySession.date)}</div>
+            <div><span style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>Duration:</span> {displaySession.durationMinutes} minutes</div>
+            {displaySession.notes && <div><span style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>Notes:</span> {displaySession.notes}</div>}
           </div>
 
-          <h3 style={{ marginBottom: '1rem', borderBottom: '1px solid var(--border-soft)', paddingBottom: '0.5rem', color: 'var(--text-main)', fontSize: '1.1rem', fontWeight: '600' }}>
+          <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--border-soft)', paddingBottom: '0.5rem', color: 'var(--text-main)', fontSize: '1.1rem', fontWeight: 'bold' }}>
             Exercises Logged
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {displaySession.sessionExercises.map((ex, exIndex) => (
               <div key={ex.id}>
-                <h4 style={{ color: 'var(--secondary)', marginBottom: '0.75rem', fontSize: '1.1rem' }}>{ex.exerciseName}</h4>
+                <h4 style={{ color: 'var(--text-main)', marginBottom: '0.75rem', fontSize: '1.2rem', fontWeight: 'bold' }}>{ex.exerciseName}</h4>
 
                 {isEditing && (
-                  <div style={{ display: 'flex', marginBottom: '0.5rem', color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px', paddingLeft: '0.25rem', fontWeight: '600' }}>
+                  <div style={{ display: 'flex', marginBottom: '0.5rem', color: 'var(--text-main)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px', paddingLeft: '0.25rem', fontWeight: 'bold' }}>
                     <div style={{ width: '50px' }}>Set</div>
                     <div style={{ flex: 1, textAlign: 'center' }}>Lbs</div>
                     <div style={{ flex: 1, textAlign: 'center' }}>Reps</div>
@@ -130,7 +130,7 @@ function History({ selectedSession, setSelectedSession }) {
                         gap: '0.5rem'
                       }}
                     >
-                      <span style={{ color: 'var(--text-muted)', width: '50px', fontWeight: '600', flexShrink: 0 }}>
+                      <span style={{ color: 'var(--text-main)', width: '50px', fontWeight: 'bold', flexShrink: 0 }}>
                         Set {setIndex + 1}
                       </span>
 
@@ -163,11 +163,11 @@ function History({ selectedSession, setSelectedSession }) {
                         </>
                       ) : (
                         <>
-                          <span style={{ flex: 1, textAlign: 'center', fontWeight: '500' }}>
-                            {set.weight} <small style={{ color: 'var(--text-muted)', fontWeight: 'normal' }}>lbs</small>
+                          <span style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', color: 'var(--text-main)' }}>
+                            {set.weight} <small style={{ color: 'var(--text-main)', fontWeight: 'normal' }}>lbs</small>
                           </span>
-                          <span style={{ flex: 1, textAlign: 'center', fontWeight: '500' }}>
-                            {set.reps} <small style={{ color: 'var(--text-muted)', fontWeight: 'normal' }}>reps</small>
+                          <span style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', color: 'var(--text-main)' }}>
+                            {set.reps} <small style={{ color: 'var(--text-main)', fontWeight: 'normal' }}>reps</small>
                           </span>
                         </>
                       )}
@@ -177,7 +177,7 @@ function History({ selectedSession, setSelectedSession }) {
                     <button
                       onClick={() => handleAddSet(exIndex)}
                       className="btn-ghost"
-                      style={{ marginTop: '0.25rem', fontSize: '0.85rem', color: 'var(--secondary)', padding: '0.3rem 0.5rem', alignSelf: 'flex-start' }}
+                      style={{ marginTop: '0.25rem', fontSize: '0.85rem', color: 'var(--primary)', padding: '0.3rem 0.5rem', alignSelf: 'flex-start', fontWeight: 'bold' }}
                     >
                       + Add Set
                     </button>
@@ -205,10 +205,10 @@ function History({ selectedSession, setSelectedSession }) {
       </div>
 
       {sessions.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-card)', borderRadius: '18px', border: '1px dashed var(--border-soft)' }}>
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-main)', backgroundColor: 'var(--bg-card)', borderRadius: '18px', border: '1px dashed var(--border-soft)' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📅</div>
-          <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600' }}>No workouts completed yet.</p>
-          <p style={{ fontSize: '0.9rem' }}>Go to the Workout tab to log your first session!</p>
+          <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: 'bold' }}>No workouts completed yet.</p>
+          <p style={{ fontSize: '1rem', color: 'var(--text-main)' }}>Go to the Workout tab to log your first session!</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -221,14 +221,14 @@ function History({ selectedSession, setSelectedSession }) {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <h3 className="section-title" style={{ marginBottom: '0.4rem' }}>{session.name}</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                  <h3 className="section-title" style={{ marginBottom: '0.4rem', color: 'var(--text-main)', fontWeight: 'bold' }}>{session.name}</h3>
+                  <p style={{ color: 'var(--text-main)', fontSize: '0.95rem', fontWeight: '500' }}>
                     {formatDate(session.date)} • {session.durationMinutes} min
                   </p>
                 </div>
                 <div style={{ backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-soft)', padding: '0.6rem', borderRadius: '12px', textAlign: 'center', minWidth: '70px' }}>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--secondary)' }}>{session.sessionExercises.length}</div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '0.2rem', fontWeight: '600' }}>Exercises</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--primary)' }}>{session.sessionExercises.length}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '0.2rem', fontWeight: 'bold' }}>Exercises</div>
                 </div>
               </div>
             </div>
