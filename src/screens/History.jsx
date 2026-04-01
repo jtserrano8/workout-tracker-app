@@ -37,14 +37,35 @@ function History({ selectedSession, setSelectedSession }) {
     });
   };
 
+  const handleDeleteSet = (exIndex, setIndex) => {
+    setEditDraft(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.sessionExercises[exIndex].sets.splice(setIndex, 1);
+      return updated;
+    });
+  };
+
+  const handleAddSet = (exIndex) => {
+    setEditDraft(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.sessionExercises[exIndex].sets.push({ id: Date.now(), weight: '', reps: '' });
+      return updated;
+    });
+  };
+
   const handleSave = () => {
-    updateSession(editDraft);
+    const cleaned = JSON.parse(JSON.stringify(editDraft));
+    cleaned.sessionExercises = cleaned.sessionExercises.map(ex => ({
+      ...ex,
+      sets: ex.sets.filter(s => s.weight !== '' && s.reps !== '')
+    }));
+    updateSession(cleaned);
     // Refresh the list so the updated data shows if user goes back
     const refreshed = getHistory();
     setSessions(refreshed);
     // Replace the selectedSession with the saved draft
-    const saved = refreshed.find(s => s.id === editDraft.id);
-    setSelectedSession(saved || editDraft);
+    const saved = refreshed.find(s => s.id === cleaned.id);
+    setSelectedSession(saved || cleaned);
     setIsEditing(false);
     setEditDraft(null);
   };
@@ -155,6 +176,14 @@ function History({ selectedSession, setSelectedSession }) {
                             onChange={e => handleSetChange(exIndex, setIndex, 'reps', e.target.value)}
                             style={{ flex: 1, textAlign: 'center', padding: '0.4rem 0.5rem', fontSize: '1rem' }}
                           />
+                          <button
+                            onClick={() => handleDeleteSet(exIndex, setIndex)}
+                            className="btn-ghost"
+                            style={{ padding: '0.2rem 0.5rem', fontSize: '1rem', border: 'none', color: 'var(--text-muted)', flexShrink: 0 }}
+                            title="Delete set"
+                          >
+                            ✕
+                          </button>
                         </>
                       ) : (
                         <>
@@ -168,6 +197,15 @@ function History({ selectedSession, setSelectedSession }) {
                       )}
                     </div>
                   ))}
+                  {isEditing && (
+                    <button
+                      onClick={() => handleAddSet(exIndex)}
+                      className="btn-ghost"
+                      style={{ marginTop: '0.25rem', fontSize: '0.85rem', border: 'none', color: 'var(--secondary)', padding: '0.3rem 0.5rem', alignSelf: 'flex-start' }}
+                    >
+                      + Add Set
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
