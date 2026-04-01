@@ -73,7 +73,6 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
   };
 
   const handleDelete = (id) => {
-    // We are keeping window.confirm here because that wasn't modified in earlier step if it wasn't broken (wait, Exercise Library confirm flash bug was fixed by removing window.confirm entirely. However, the user didn't ask to fix it here, but I will remove window.confirm to be safe since we removed it in the library)
     deleteTemplate(id);
     loadList();
   };
@@ -122,7 +121,7 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
                  setTemplateToConfirm(null);
                }}
                className="btn-primary"
-               style={{ padding: '1rem', border: 'none', borderRadius: '4px', fontSize: '1rem' }}
+               style={{ width: '100%' }}
              >
                Resume Current Workout
              </button>
@@ -132,14 +131,14 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
                  setTemplateToConfirm(null);
                }} 
                className="btn-danger" 
-               style={{ padding: '1rem', border: '1px solid var(--error)', borderRadius: '4px', backgroundColor: 'transparent', fontSize: '1rem' }}
+               style={{ width: '100%' }}
              >
                Discard & Start New
              </button>
              <button 
                onClick={() => setTemplateToConfirm(null)}
                className="btn-ghost"
-               style={{ padding: '1rem', borderRadius: '4px', marginTop: '0.5rem', fontSize: '1rem' }}
+               style={{ width: '100%' }}
              >
                Cancel
              </button>
@@ -154,10 +153,10 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
       return (
          <div className="screen-container">
            <ScreenHeader title="Select Exercises">
-             <button onClick={() => setShowExercisePicker(false)} className="btn-secondary" style={{ padding: '0.4rem 1rem', border: 'none', borderRadius: '4px' }}>Done</button>
+             <button onClick={() => setShowExercisePicker(false)} className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>Done</button>
            </ScreenHeader>
            
-           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
              {availableExercises.map(ex => {
                const isSelected = selectedExercises.includes(ex.id);
                return (
@@ -167,15 +166,15 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
                    onClick={() => toggleExerciseSelection(ex.id)}
                    style={{ 
                      display: 'flex', justifyContent: 'space-between', cursor: 'pointer', margin: 0,
-                     border: isSelected ? '2px solid var(--secondary)' : '2px solid transparent'
+                     border: isSelected ? '2px solid var(--secondary)' : '1px solid var(--border-soft)'
                    }}
                  >
-                   <span>{ex.name}</span>
+                   <span style={{ fontWeight: isSelected ? '600' : '400', color: 'var(--text-main)' }}>{ex.name}</span>
                    {isSelected && <span style={{ color: 'var(--secondary)', fontWeight: 'bold' }}>✓</span>}
                  </div>
                );
              })}
-             {availableExercises.length === 0 && <p>No exercises in the library. Go add some first!</p>}
+             {availableExercises.length === 0 && <p style={{ color: 'var(--text-muted)' }}>No exercises in the library. Go add some first!</p>}
            </div>
          </div>
       );
@@ -188,7 +187,7 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
           {errorMsg && <p style={{ color: 'var(--error)', marginBottom: '1rem', fontWeight: 'bold' }}>{errorMsg}</p>}
           
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Template Name *</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '500' }}>Template Name *</label>
             <input 
               type="text" 
               value={name} 
@@ -199,7 +198,7 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Notes (Optional)</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '500' }}>Notes (Optional)</label>
             <textarea 
               value={notes} 
               onChange={e => setNotes(e.target.value)} 
@@ -211,28 +210,28 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
 
           <div style={{ marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <label style={{ color: 'var(--text-muted)' }}>Exercises</label>
-              <button onClick={() => setShowExercisePicker(true)} style={{ backgroundColor: 'transparent', color: 'var(--primary)', padding: 0, border: 'none' }}>
+              <label style={{ color: 'var(--text-main)', fontWeight: '500' }}>Exercises</label>
+              <button onClick={() => setShowExercisePicker(true)} className="btn-ghost" style={{ padding: 0 }}>
                 + Add Exercises
               </button>
             </div>
             
             {selectedExercises.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontStyle: 'italic', backgroundColor: '#2a2a2a', padding: '1rem', borderRadius: '4px' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontStyle: 'italic', backgroundColor: 'var(--bg-main)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border-soft)' }}>
                 No exercises added yet. Tap above to select them.
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {selectedExercises.map((exId, idx) => (
-                  <div key={`${exId}-${idx}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#2a2a2a', padding: '0.75rem', borderRadius: '4px' }}>
-                    <div style={{ flex: 1, paddingRight: '0.5rem' }}>
-                      <span style={{ color: 'var(--text-muted)', marginRight: '0.5rem' }}>{idx + 1}.</span> 
+                  <div key={`${exId}-${idx}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-main)', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--border-soft)' }}>
+                    <div style={{ flex: 1, paddingRight: '0.5rem', color: 'var(--text-main)' }}>
+                      <span style={{ color: 'var(--text-muted)', marginRight: '0.5rem', fontWeight: 'bold' }}>{idx + 1}.</span> 
                       {getExerciseName(exId)}
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => moveExercise(idx, 'up')} disabled={idx === 0} className="btn-outline" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', opacity: idx === 0 ? 0.3 : 1 }}>↑</button>
-                      <button onClick={() => moveExercise(idx, 'down')} disabled={idx === selectedExercises.length - 1} className="btn-outline" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', opacity: idx === selectedExercises.length - 1 ? 0.3 : 1 }}>↓</button>
-                      <button onClick={() => removeExercise(exId)} className="btn-danger" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>X</button>
+                      <button onClick={() => moveExercise(idx, 'up')} disabled={idx === 0} className="btn-outline" style={{ padding: '0.4rem 0.6rem', opacity: idx === 0 ? 0.3 : 1 }}>↑</button>
+                      <button onClick={() => moveExercise(idx, 'down')} disabled={idx === selectedExercises.length - 1} className="btn-outline" style={{ padding: '0.4rem 0.6rem', opacity: idx === selectedExercises.length - 1 ? 0.3 : 1 }}>↓</button>
+                      <button onClick={() => removeExercise(exId)} className="btn-danger" style={{ padding: '0.4rem 0.6rem' }}>X</button>
                     </div>
                   </div>
                 ))}
@@ -241,8 +240,8 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <button onClick={handleSave} className="btn-primary" style={{ flex: 1, padding: '0.8rem', border: 'none', borderRadius: '4px' }}>Save Template</button>
-            <button onClick={() => setIsEditing(false)} className="btn-outline" style={{ flex: 1, padding: '0.8rem', borderRadius: '4px' }}>Cancel</button>
+            <button onClick={handleSave} className="btn-primary" style={{ flex: 1 }}>Save Template</button>
+            <button onClick={() => setIsEditing(false)} className="btn-outline" style={{ flex: 1 }}>Cancel</button>
           </div>
         </div>
       </div>
@@ -251,38 +250,37 @@ function Templates({ startTemplate, activeSession, resumeCurrentWorkout }) {
 
   return (
     <div className="screen-container">
-      <ScreenHeader title="Workout Templates">
-        <button onClick={handleOpenCreate} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', border: 'none', borderRadius: '4px' }}>+ Create</button>
-      </ScreenHeader>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', marginTop: '1rem' }}>
+        <h1 className="screen-title" style={{ marginBottom: 0 }}>Workout Templates</h1>
+        <button onClick={handleOpenCreate} className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>+ Create</button>
+      </div>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {templates.map(tpl => (
           <div key={tpl.id} className="card" style={{ margin: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
               <div>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{tpl.name}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.75rem' }}>
+                <h3 className="section-title" style={{ marginBottom: '0.25rem' }}>{tpl.name}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                   {tpl.exercises?.length || 0} Exercises
                 </p>
               </div>
-              <div>
-                 <button onClick={() => handleStartTemplate(tpl)} className="btn-primary" style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', border: 'none' }}>
-                   Start
-                 </button>
-              </div>
+              <button onClick={() => handleStartTemplate(tpl)} className="btn-primary" style={{ padding: '8px 20px' }}>
+                Start
+              </button>
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid #333', paddingTop: '0.75rem' }}>
-              <button onClick={() => handleOpenEdit(tpl)} className="btn-outline" style={{ flex: 1, padding: '0.4rem', color: 'var(--primary)', borderColor: 'var(--primary)' }}>Edit</button>
-              <button onClick={() => handleDelete(tpl.id)} className="btn-danger" style={{ flex: 1, padding: '0.4rem' }}>Delete</button>
+            <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid var(--border-soft)', paddingTop: '1rem' }}>
+              <button onClick={() => handleOpenEdit(tpl)} className="btn-outline" style={{ flex: 1, color: 'var(--primary)', borderColor: 'var(--primary)' }}>Edit</button>
+              <button onClick={() => handleDelete(tpl.id)} className="btn-danger" style={{ flex: 1 }}>Delete</button>
             </div>
           </div>
         ))}
         
         {templates.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-card)', borderRadius: '8px' }}>
+          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-card)', borderRadius: '18px', border: '1px dashed var(--border-soft)' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📋</div>
-            <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>No templates created yet.</p>
+            <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600' }}>No templates created yet.</p>
             <p style={{ fontSize: '0.9rem' }}>Tap the "+ Create" button above to build your very first routine!</p>
           </div>
         )}
