@@ -45,64 +45,124 @@ function WorkoutRunner({
   cancelWorkout 
 }) {
   return (
-    <div className="screen-container">
-      <ScreenHeader title={activeSession.name}>
-        <div style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize: '0.9rem', backgroundColor: '#1a3329', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>
-          Active
+    <div className="screen-container" style={{ paddingBottom: '90px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', marginTop: '1rem' }}>
+        <h1 style={{ fontSize: '1.8rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+          {activeSession.name}
+        </h1>
+        <div style={{ 
+          color: 'var(--bg-dark)', 
+          fontWeight: '700', 
+          fontSize: '0.85rem', 
+          backgroundColor: 'var(--secondary)', 
+          padding: '0.35rem 0.75rem', 
+          borderRadius: '20px',
+          boxShadow: '0 2px 8px rgba(3, 218, 198, 0.3)'
+        }}>
+          ACTIVE
         </div>
-      </ScreenHeader>
+      </div>
 
       {warningMsg && (
-        <div style={{ backgroundColor: 'rgba(207, 102, 121, 0.2)', padding: '0.75rem', borderRadius: '4px', marginBottom: '1.5rem', border: '1px solid var(--error)' }}>
-          <p style={{ color: 'var(--error)', fontWeight: 'bold' }}>{warningMsg}</p>
+        <div style={{ backgroundColor: 'rgba(207, 102, 121, 0.15)', padding: '1rem', borderRadius: '12px', marginBottom: '1.5rem', border: '1px solid rgba(207, 102, 121, 0.4)' }}>
+          <p style={{ color: 'var(--error)', fontWeight: '600', margin: 0, fontSize: '0.95rem' }}>{warningMsg}</p>
         </div>
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {activeSession.sessionExercises.map((ex, exIndex) => (
-          <div key={ex.id} className="card" style={{ margin: 0, padding: '1.25rem' }}>
-            <h3 style={{ marginBottom: ex.previousString ? '0.25rem' : '1.25rem', color: 'var(--secondary)', fontSize: '1.2rem' }}>{ex.exerciseName}</h3>
+          <div key={ex.id} style={{ 
+            backgroundColor: '#1e1e1e', 
+            borderRadius: '20px', 
+            padding: '1.25rem',
+            border: '1px solid rgba(255,255,255,0.03)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.2)' 
+          }}>
+            <h3 style={{ marginBottom: ex.previousString ? '0.35rem' : '1.25rem', color: 'var(--primary)', fontSize: '1.2rem', fontWeight: '700' }}>
+              {ex.exerciseName}
+            </h3>
             {ex.previousString && (
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.25rem', fontStyle: 'italic' }}>
-                {ex.previousString}
+              <p style={{ 
+                color: 'var(--text-muted)', 
+                fontSize: '0.85rem', 
+                marginBottom: '1.25rem', 
+                fontWeight: '500',
+                backgroundColor: 'rgba(255,255,255,0.05)',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '8px',
+                display: 'inline-block'
+              }}>
+                {ex.previousString.includes('↻ Last:') ? ex.previousString : `↻ Last: ${ex.previousString}`}
               </p>
             )}
             
-            <div style={{ display: 'flex', marginBottom: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              <div style={{ width: '30px', paddingLeft: '0.25rem' }}>Set</div>
+            <div style={{ display: 'flex', marginBottom: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{ width: '40px', textAlign: 'center' }}>Set</div>
               <div style={{ flex: 1, textAlign: 'center' }}>Lbs</div>
               <div style={{ flex: 1, textAlign: 'center' }}>Reps</div>
             </div>
 
             {ex.sets.map((set, setIndex) => {
-              // Automatic validation: visually indicate if the set is successfully filled
               const isSetValid = isValidNumber(set.weight) && isValidNumber(set.reps);
-              const rowBorder = isSetValid ? '1px solid rgba(76, 175, 80, 0.3)' : '1px solid transparent';
-              const inputBg = isSetValid ? '#1a241b' : '#121212';
+              const rowBorder = isSetValid ? '1px solid rgba(3, 218, 198, 0.4)' : '1px solid rgba(255,255,255,0.05)';
+              const rowBg = isSetValid ? 'rgba(3, 218, 198, 0.05)' : 'transparent';
               
               return (
-                <div key={set.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', border: rowBorder, padding: '0.25rem', borderRadius: '6px', transition: 'all 0.2s' }}>
-                  <div style={{ width: '30px', fontWeight: 'bold', color: 'var(--text-muted)', paddingLeft: '0.25rem' }}>{setIndex + 1}</div>
+                <div key={set.id} style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  marginBottom: '0.75rem', 
+                  border: rowBorder, 
+                  backgroundColor: rowBg,
+                  padding: '0.5rem', 
+                  borderRadius: '12px', 
+                  transition: 'all 0.2s ease' 
+                }}>
+                  <div style={{ width: '40px', fontWeight: '700', color: isSetValid ? 'var(--secondary)' : 'var(--text-muted)', textAlign: 'center', fontSize: '1rem' }}>
+                    {setIndex + 1}
+                  </div>
                   
                   <div style={{ flex: 1, padding: '0 0.5rem' }}>
                     <input 
                       type="number" 
+                      className="input-base"
                       value={set.weight}
                       onChange={e => updateSet(exIndex, setIndex, 'weight', e.target.value)}
                       placeholder={ex.previousSets?.[setIndex]?.weight || '--'}
-                      className="input-base"
-                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
+                      style={{ 
+                        width: '100%',
+                        padding: '0.75rem', 
+                        textAlign: 'center', 
+                        fontSize: '1.1rem', 
+                        fontWeight: '600',
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        color: 'var(--text-main)',
+                        border: 'none',
+                        borderRadius: '8px',
+                        outline: 'none'
+                      }} 
                     />
                   </div>
                   
                   <div style={{ flex: 1, padding: '0 0.5rem' }}>
                     <input 
                       type="number" 
+                      className="input-base"
                       value={set.reps}
                       onChange={e => updateSet(exIndex, setIndex, 'reps', e.target.value)}
                       placeholder={ex.previousSets?.[setIndex]?.reps || '--'}
-                      className="input-base"
-                      style={{ padding: '0.6rem', textAlign: 'center', fontSize: '1.1rem', backgroundColor: inputBg, transition: 'background-color 0.2s' }} 
+                      style={{ 
+                        width: '100%',
+                        padding: '0.75rem', 
+                        textAlign: 'center', 
+                        fontSize: '1.1rem', 
+                        fontWeight: '600',
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        color: 'var(--text-main)',
+                        border: 'none',
+                        borderRadius: '8px',
+                        outline: 'none'
+                      }} 
                     />
                   </div>
                 </div>
@@ -111,33 +171,61 @@ function WorkoutRunner({
 
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
               <button 
-                onClick={() => addSet(exIndex)} 
-                className="btn-ghost" 
-                style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderRadius: '4px' }}
-              >
-                + Empty Set
-              </button>
-              <button 
                 onClick={() => duplicateLastSet(exIndex)} 
-                className="btn-ghost" 
-                style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderRadius: '4px' }}
+                style={{ flex: 1, padding: '0.75rem', fontSize: '0.95rem', fontWeight: '600', borderRadius: '12px', backgroundColor: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', border: 'none' }}
               >
                 + Duplicate Last
+              </button>
+              <button 
+                onClick={() => addSet(exIndex)} 
+                style={{ flex: 1, padding: '0.75rem', fontSize: '0.95rem', fontWeight: '600', borderRadius: '12px', backgroundColor: 'rgba(255,255,255,0.05)', color: 'var(--primary)', border: 'none' }}
+              >
+                + Empty Set
               </button>
             </div>
           </div>
         ))}
+
         {activeSession.sessionExercises.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: 'var(--bg-card)', borderRadius: '8px' }}>
-            <p style={{ color: 'var(--text-muted)' }}>No exercises in this workout.</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Finish to clear, or click Cancel.</p>
+          <div style={{ textAlign: 'center', padding: '3rem 2rem', backgroundColor: '#1e1e1e', borderRadius: '20px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+            <p style={{ color: 'var(--text-main)', fontSize: '1.1rem', fontWeight: '600' }}>No exercises yet.</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>Add some to your template first.</p>
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-        <button onClick={finishWorkout} className="btn-primary" style={{ flex: 2, padding: '1rem', fontSize: '1.1rem', border: 'none', borderRadius: '4px' }}>Finish Workout</button>
-        <button onClick={cancelWorkout} className="btn-danger" style={{ flex: 1, border: '1px solid var(--error)', borderRadius: '4px', backgroundColor: 'transparent' }}>Cancel</button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2.5rem', marginBottom: '2rem' }}>
+        <button 
+          onClick={finishWorkout} 
+          style={{ 
+            width: '100%', 
+            padding: '1.25rem', 
+            fontSize: '1.1rem', 
+            fontWeight: '700', 
+            border: 'none', 
+            borderRadius: '16px', 
+            backgroundColor: 'var(--primary)', 
+            color: 'var(--bg-dark)',
+            boxShadow: '0 4px 16px rgba(187, 134, 252, 0.3)'
+          }}
+        >
+          Finish Workout
+        </button>
+        <button 
+          onClick={cancelWorkout} 
+          style={{ 
+            width: '100%', 
+            padding: '1rem', 
+            fontSize: '1rem', 
+            fontWeight: '600', 
+            border: '1px solid rgba(207, 102, 121, 0.5)', 
+            borderRadius: '16px', 
+            backgroundColor: 'transparent', 
+            color: 'var(--error)' 
+          }}
+        >
+          Cancel Workout
+        </button>
       </div>
     </div>
   );
