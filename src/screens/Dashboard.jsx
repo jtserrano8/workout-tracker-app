@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTemplates } from '../data/templateStore';
 import { getHistory } from '../data/sessionStore';
-import { getGoals } from '../data/goalStore';
+import { getGoalsWithComputed } from '../data/goalStore';
 import { formatDate } from '../utils/date';
 import ScreenHeader from '../components/layout/ScreenHeader';
 
@@ -21,7 +21,7 @@ function Dashboard({ setCurrentTab, setSelectedSession }) {
       historyCount: history.length,
       recentWorkout: history.length > 0 ? history[0] : null
     });
-    setTopGoals(getGoals().slice(0, 3));
+    setTopGoals(getGoalsWithComputed().slice(0, 3));
   }, []);
 
   return (
