@@ -73,10 +73,10 @@ function GoalCard({ goal, onUpdate, onDelete, exercises }) {
   return (
     <div
       className="card"
-      style={{ margin: 0, padding: '1.25rem', borderLeft: `4px solid ${done ? 'var(--secondary)' : 'var(--primary)'}` }}
+      style={{ margin: 0, padding: '20px', borderLeft: `4px solid ${done ? 'var(--secondary)' : 'var(--primary)'}` }}
     >
       {isEditing ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <input
             className="input-base"
             name="title"
@@ -93,7 +93,7 @@ function GoalCard({ goal, onUpdate, onDelete, exercises }) {
               {exercises.map(ex => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
             </select>
           )}
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
             {draft.type === 'manual' && (
               <input
                 className="input-base"
@@ -118,36 +118,36 @@ function GoalCard({ goal, onUpdate, onDelete, exercises }) {
             />
           </div>
           {editError && <p style={{ color: 'var(--error)', fontSize: '0.85rem' }}>{editError}</p>}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
             <button onClick={handleSave} className="btn-secondary" style={{ flex: 1 }}>Save</button>
             <button onClick={handleCancel} className="btn-outline" style={{ flex: 1 }}>Cancel</button>
           </div>
         </div>
       ) : (
         <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-            <div style={{ flex: 1, paddingRight: '0.5rem' }}>
-              <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', marginBottom: '0.15rem' }}>{goal.title}</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <div style={{ flex: 1, paddingRight: '8px' }}>
+              <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', marginBottom: '4px' }}>{goal.title}</h3>
               {!isManual && (
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-main)', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-soft)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-main)', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-soft)', padding: '2px 8px', borderRadius: '4px' }}>
                   auto · {typeLabel}
                 </span>
               )}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               <span style={{ fontSize: '0.95rem', fontWeight: 'bold', color: done ? 'var(--secondary)' : 'var(--primary)' }}>{pct}%</span>
-              <button onClick={handleStartEdit} className="btn-ghost" style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }}>Edit</button>
-              <button onClick={() => onDelete(goal.id)} className="btn-danger" style={{ padding: '0.25rem 0.6rem', fontSize: '0.8rem' }}>Delete</button>
+              <button onClick={handleStartEdit} className="btn-ghost" style={{ padding: '4px 8px', fontSize: '0.8rem' }}>Edit</button>
+              <button onClick={() => onDelete(goal.id)} className="btn-danger" style={{ padding: '4px 8px', fontSize: '0.8rem' }}>Delete</button>
             </div>
           </div>
 
-          <div style={{ height: '6px', backgroundColor: 'var(--border-soft)', borderRadius: '3px', marginBottom: '0.6rem', overflow: 'hidden' }}>
+          <div style={{ height: '6px', backgroundColor: 'var(--border-soft)', borderRadius: '3px', marginBottom: '10px', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${pct}%`, backgroundColor: done ? 'var(--secondary)' : 'var(--primary)', borderRadius: '3px', transition: 'width 0.3s ease' }} />
           </div>
 
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
             {goal.currentValue} / {goal.targetValue}
-            {done && <span style={{ color: 'var(--secondary)', marginLeft: '0.5rem', fontWeight: 'bold' }}>✓ Complete</span>}
+            {done && <span style={{ color: 'var(--secondary)', marginLeft: '8px', fontWeight: 'bold' }}>✓ Complete</span>}
           </p>
         </>
       )}
@@ -204,14 +204,14 @@ function Goals() {
 
   return (
     <div className="screen-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', marginTop: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', marginTop: '16px' }}>
         <h1 className="screen-title" style={{ marginBottom: 0 }}>Goals</h1>
       </div>
 
       {/* Create form */}
-      <div className="card" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <h3 className="section-title" style={{ color: 'var(--primary)', marginBottom: '1rem' }}>New Goal</h3>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div className="card" style={{ padding: '20px', marginBottom: '24px' }}>
+        <h3 className="section-title" style={{ color: 'var(--primary)', marginBottom: '16px' }}>New Goal</h3>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <input
             className="input-base"
             name="title"
@@ -228,7 +228,7 @@ function Goals() {
               {exercises.map(ex => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
             </select>
           )}
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
             {form.type === 'manual' && (
               <input
                 className="input-base"
@@ -258,15 +258,15 @@ function Goals() {
       </div>
 
       {/* Goal list */}
-      <h3 className="section-title" style={{ marginBottom: '1rem' }}>Your Goals</h3>
+      <h3 className="section-title" style={{ marginBottom: '16px' }}>Your Goals</h3>
       {goals.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-card)', borderRadius: '18px', border: '1px dashed var(--border-soft)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-          <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600' }}>No goals yet.</p>
+        <div style={{ textAlign: 'center', padding: '48px 16px', color: 'var(--text-muted)', backgroundColor: 'var(--bg-card)', borderRadius: '18px', border: '1px dashed var(--border-soft)' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🎯</div>
+          <p style={{ fontSize: '1.1rem', marginBottom: '8px', color: 'var(--text-main)', fontWeight: '600' }}>No goals yet.</p>
           <p style={{ fontSize: '0.9rem' }}>Add one above to start tracking your progress!</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {goals.map(goal => (
             <GoalCard
               key={goal.id}

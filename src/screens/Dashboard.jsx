@@ -11,12 +11,10 @@ function Dashboard({ setCurrentTab, setSelectedSession }) {
   });
 
   useEffect(() => {
-    // Basic logic to populate the UI structure
     const history = getHistory();
     const goals = getGoalsWithComputed().slice(0, 3);
     setTopGoals(goals);
 
-    // Populate Today's Summary UI
     const today = new Date().toDateString();
     const todayWorkouts = history.filter(w => new Date(w.date).toDateString() === today);
     
@@ -32,39 +30,40 @@ function Dashboard({ setCurrentTab, setSelectedSession }) {
 
   return (
     <div className="screen-container">
-      <div style={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
+      <div style={{ marginBottom: '24px', marginTop: '16px' }}>
         <h1 className="screen-title" style={{ marginBottom: 0 }}>Welcome back 👋</h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.25rem' }}>Ready to crush your goals today?</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '4px' }}>Ready to crush your goals today?</p>
       </div>
       
       {/* 1. Today's Summary */}
-      <section style={{ marginBottom: '2.5rem' }}>
+      <section style={{ marginBottom: '32px' }}>
         <h3 className="section-title">Today's Summary</h3>
-        <div className="card" style={{ padding: '1.5rem', margin: 0 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Workout Completed</span>
+        <div className="card" style={{ margin: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '600' }}>Workout Completed</span>
             <span style={{ 
-              background: todaySummary.completed ? 'var(--secondary)' : 'var(--border-soft)', 
+              background: todaySummary.completed ? 'var(--secondary)' : 'var(--bg-main)', 
               color: todaySummary.completed ? '#fff' : 'var(--text-muted)', 
-              padding: '0.35rem 0.85rem', 
+              padding: '4px 12px', 
               borderRadius: '20px', 
               fontSize: '0.85rem', 
-              fontWeight: '600' 
+              fontWeight: 'bold',
+              border: todaySummary.completed ? 'none' : '1px solid var(--border-soft)'
             }}>
               {todaySummary.completed ? 'Yes' : 'No'}
             </span>
           </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div style={{ flex: 1, backgroundColor: 'var(--bg-main)', padding: '1.25rem 1rem', borderRadius: '16px', border: '1px solid var(--border-soft)' }}>
-              <div style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '0.25rem' }}>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <div style={{ flex: 1, backgroundColor: 'var(--bg-main)', padding: '20px 16px', borderRadius: '16px', border: '1px solid var(--border-soft)' }}>
+              <div style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '4px' }}>
                 {todaySummary.exercises}
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
                 Exercises
               </div>
             </div>
-            <div style={{ flex: 1, backgroundColor: 'var(--bg-main)', padding: '1.25rem 1rem', borderRadius: '16px', border: '1px solid var(--border-soft)' }}>
-              <div style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--secondary)', marginBottom: '0.25rem' }}>
+            <div style={{ flex: 1, backgroundColor: 'var(--bg-main)', padding: '20px 16px', borderRadius: '16px', border: '1px solid var(--border-soft)' }}>
+              <div style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--secondary)', marginBottom: '4px' }}>
                 {todaySummary.duration}<span style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginLeft: '2px' }}>m</span>
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>
@@ -76,29 +75,29 @@ function Dashboard({ setCurrentTab, setSelectedSession }) {
       </section>
 
       {/* 2. Goals Progress */}
-      <section style={{ marginBottom: '2.5rem' }}>
+      <section style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <h3 className="section-title" style={{ marginBottom: 0 }}>Goals Progress</h3>
           <button 
             onClick={() => setCurrentTab?.('goals')} 
             className="btn-ghost"
-            style={{ padding: '0.5rem 0', fontSize: '0.9rem' }}
+            style={{ padding: '4px', fontSize: '0.9rem' }}
           >
             See all
           </button>
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {topGoals.length > 0 ? topGoals.map(goal => {
             const pct = goal.targetValue > 0 ? Math.min(100, Math.round((goal.currentValue / goal.targetValue) * 100)) : 0;
             const isDone = pct >= 100;
             return (
-              <div key={goal.id} className="card" style={{ padding: '1.25rem', margin: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.85rem' }}>
+              <div key={goal.id} className="card" style={{ margin: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '12px' }}>
                   <span style={{ fontWeight: '600', fontSize: '1rem', color: 'var(--text-main)' }}>{goal.title}</span>
-                  <span style={{ fontWeight: '700', fontSize: '1.1rem', color: isDone ? 'var(--secondary)' : 'var(--primary)' }}>{pct}%</span>
+                  <span style={{ fontWeight: '700', fontSize: '1rem', color: isDone ? 'var(--secondary)' : 'var(--primary)' }}>{pct}%</span>
                 </div>
-                <div style={{ height: '8px', backgroundColor: 'var(--border-soft)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ height: '8px', backgroundColor: 'var(--bg-main)', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-soft)' }}>
                   <div style={{ 
                     height: '100%', 
                     width: `${pct}%`, 
@@ -110,44 +109,37 @@ function Dashboard({ setCurrentTab, setSelectedSession }) {
               </div>
             );
           }) : (
-            <div className="card" style={{ padding: '2rem 1.5rem', margin: 0, textAlign: 'center', borderStyle: 'dashed' }}>
-              <p style={{ color: 'var(--text-muted)' }}>No active goals. Set some up to track progress!</p>
+            <div className="card" style={{ margin: 0, textAlign: 'center', border: '1px dashed var(--border-soft)', padding: '32px 24px' }}>
+              <p style={{ color: 'var(--text-muted)', fontWeight: '500' }}>No active goals. Set some up to track progress!</p>
             </div>
           )}
         </div>
       </section>
 
       {/* 3. Quick Actions */}
-      <section style={{ marginBottom: '1rem' }}>
+      <section style={{ marginBottom: '16px' }}>
         <h3 className="section-title">Quick Actions</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <button 
             onClick={() => setCurrentTab?.('workout')}
             className="btn-primary"
-            style={{ 
-              width: '100%', 
-              fontSize: '1.05rem',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '1.15rem'
-            }}
+            style={{ width: '100%' }}
           >
             Start Workout
           </button>
           
-          <div style={{ display: 'flex', gap: '0.85rem' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
             <button 
               onClick={() => setCurrentTab?.('history')}
               className="btn-outline"
-              style={{ flex: 1, padding: '1.15rem 1rem', fontSize: '0.95rem' }}
+              style={{ flex: 1 }}
             >
               View History
             </button>
             <button 
               onClick={() => setCurrentTab?.('bodyweight')}
               className="btn-outline"
-              style={{ flex: 1, padding: '1.15rem 1rem', fontSize: '0.95rem' }}
+              style={{ flex: 1 }}
             >
               Log Weight
             </button>
